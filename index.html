@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Маркет</title>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="profile"></div>
+    <div class="container">
+        <main>
+            <section class="page page-market active">
+              <div class="market-controls">
+    <input type="text" id="filterInput" class="market-filter" placeholder="Поиск по названию...">
+    <select id="sortSelect" class="market-sort">
+        <option value="asc">Сначала дешевые</option>
+        <option value="desc">Сначала дорогие</option>
+    </select>
+    <div class="ton-balance">
+        <div class="ton-icon"></div>
+        <span id="tonBalance">0</span>
+    </div>
+</div>
+                <div class="products-grid" id="productsGrid"></div>
+            </section>
+            <section class="page page-cart">
+                <h2>Корзина</h2>
+                <div id="cartCountInfo" style="color:#267dff;font-size:1.13rem;font-weight:600;margin-bottom:10px;"></div>
+                <div id="cartList"></div>
+                <div class="cart-summary">
+                    <span>Итог: <br><span id="cartTotal">0 ₽</span></span>
+                    <button id="checkoutBtn">Оформить заказ</button>
+                </div>
+            </section>
+            <section class="page page-partners">
+                <div style="background:linear-gradient(90deg,#267dff 60%,#4e9cff 100%);border-radius:24px;padding:24px 18px 18px 18px;box-shadow:0 4px 24px rgba(38,125,255,0.10),0 1.5px 8px rgba(0,0,0,0.10);margin-bottom:18px;">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+                        <div style="color:#fff;font-size:1.45rem;font-weight:700;line-height:1.18;max-width:70%;">Приглашай друзей<br>и получай до 5% с их депозитов</div>
+                        <div style="font-size:2.2rem;color:#fff;background:rgba(255,255,255,0.13);border-radius:16px;padding:10px 18px 6px 18px;">%</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;margin:18px 0 18px 0;">
+                        <button style="flex:1;background:#fff;color:#267dff;border:none;border-radius:12px;padding:14px 0;font-size:1.13rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(38,125,255,0.10);" 
+        onclick="copyReferralLink()">
+    Пригласить друзей
+</button>
+                        <button class="copy-link-btn" style="background:#fff;color:#267dff;border:none;border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:1.45rem;font-weight:700;box-shadow:0 2px 8px rgba(38,125,255,0.10);padding:0;">
+                            <svg width="28" height="28" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M589.3 260.9v30H371.4v-30H268.9v513h117.2v-304l109.7-99.1h202.1V260.9z" fill="#E1F0FF" />
+                                <path d="M516.1 371.1l-122.9 99.8v346.8h370.4V371.1z" fill="#E1F0FF" />
+                                <path d="M752.7 370.8h21.8v435.8h-21.8z" fill="#446EB1" />
+                                <path d="M495.8 370.8h277.3v21.8H495.8z" fill="#446EB1" />
+                                <path d="M495.8 370.8h21.8v124.3h-21.8z" fill="#446EB1" />
+                                <path d="M397.7 488.7l-15.4-15.4 113.5-102.5 15.4 15.4z" fill="#446EB1" />
+                                <path d="M382.3 473.3h135.3v21.8H382.3z" fill="#446EB1" />
+                                <path d="M382.3 479.7h21.8v348.6h-21.8zM404.1 806.6h370.4v21.8H404.1z" fill="#446EB1" />
+                                <path d="M447.7 545.1h261.5v21.8H447.7zM447.7 610.5h261.5v21.8H447.7zM447.7 675.8h261.5v21.8H447.7z" fill="#6D9EE8" />
+                                <path d="M251.6 763h130.7v21.8H251.6z" fill="#446EB1" />
+                                <path d="M251.6 240.1h21.8v544.7h-21.8zM687.3 240.1h21.8v130.7h-21.8zM273.4 240.1h108.9v21.8H273.4z" fill="#446EB1" />
+                                <path d="M578.4 240.1h130.7v21.8H578.4zM360.5 196.5h21.8v108.9h-21.8zM382.3 283.7h196.1v21.8H382.3zM534.8 196.5h65.4v21.8h-65.4z" fill="#446EB1" />
+                                <path d="M360.5 196.5h65.4v21.8h-65.4zM404.1 174.7h152.5v21.8H404.1zM578.4 196.5h21.8v108.9h-21.8z" fill="#446EB1" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="partner-stats" style="margin-bottom:18px;">
+                  <div class="partner-card">
+                    <div class="partner-value" id="partnerPercent">1%</div>
+                    <div class="partner-label">Ваш процент</div>
+                  </div>
+                  <div class="partner-card">
+                    <div class="partner-value" id="partnerInvited">0</div>
+                    <div class="partner-label">Приглашено</div>
+                  </div>
+                  <div class="partner-card">
+                    <div class="partner-value" id="partnerEarned">0 ₽</div>
+                    <div class="partner-label">Заработано</div>
+                  </div>
+                </div>
+                <div style="background:#23232a;border-radius:16px;padding:12px 0 12px 0;text-align:center;color:#fff;font-size:1.08rem;font-weight:600;margin-bottom:18px;">Как мне зарабатывать больше?</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:0 2px 0 2px;color:#bdbdf7;font-size:1.01rem;">
+    <div>Пользователь (топ-25)</div>
+    <div>Ваш заработок</div>
+</div>
+<div style="text-align:center;color:#bdbdf7;font-size:1.01rem;margin-top:15px;padding:10px;">
+    Вы пока не привели не одного друга
+</div> 
+<div style="text-align:center;color:#bdbdf7;font-size:1.01rem;margin-top:15px;padding:10px;">
+    
+</div> 
+<div style="text-align:center;color:#bdbdf7;font-size:1.01rem;margin-top:15px;padding:10px;">
+    
+</div> 
+            </section>
+            <section class="page page-history">
+                <div class="history-empty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;">
+                    <div class="history-empty-icon" style="margin-bottom:24px;"></div>
+                    <div style="color:#fff;font-size:1.25rem;font-weight:600;margin-bottom:22px;">Вы еще ничего не покупали.</div>
+                    <button id="goToMarketBtn" style="background:#188cff;color:#fff;border:none;border-radius:14px;padding:14px 32px;font-size:1.13rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(38,125,255,0.10);">Перейти к покупкам</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <nav class="bottom-nav">
+        <div class="nav-item active" data-page="market">
+            <svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="4" fill="currentColor"/><rect x="7" y="4" width="2" height="6" rx="1" fill="#fff"/><rect x="15" y="4" width="2" height="6" rx="1" fill="#fff"/></svg>
+            <span class="nav-label">Маркет</span>
+        </div>
+        <div class="nav-item" data-page="cart">
+            <svg class="nav-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="10" width="24" height="12" rx="6" fill="currentColor" fill-opacity="0.18"/>
+              <circle cx="9" cy="25" r="2.5" fill="#267dff"/>
+              <circle cx="15" cy="25" r="2.5" fill="#267dff"/>
+              <circle cx="21" cy="25" r="2.5" fill="#267dff"/>
+              <circle cx="27" cy="25" r="2.5" fill="#267dff"/>
+              <rect x="8" y="14" width="16" height="5" rx="2.5" fill="#fff" fill-opacity="0.13"/>
+              <path d="M8 10V8.5C8 6.01472 10.0147 4 12.5 4H19.5C21.9853 4 24 6.01472 24 8.5V10" stroke="#267dff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="nav-label">Корзина</span>
+            <span id="cartNavCount" style="display:none;position:absolute;top:2px;right:18px;background:#ff4d4f;color:#fff;font-size:0.93rem;font-weight:700;border-radius:10px;padding:1px 7px;min-width:18px;text-align:center;line-height:1.5;"></span>
+        </div>
+        <div class="nav-item" data-page="partners">
+            <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="7" cy="8" r="4" fill="currentColor"/><circle cx="17" cy="8" r="4" fill="currentColor"/><rect x="2" y="16" width="20" height="6" rx="3" fill="currentColor"/></svg>
+            <span class="nav-label">Партнерство</span>
+        </div>
+        <div class="nav-item" data-page="history">
+            <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 6v6l4 2" stroke="#fff" stroke-width="2" fill="none"/></svg>
+            <span class="nav-label">История</span>
+        </div>
+    </nav>
+<div id="topupModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('topupModal')">×</span>
+        <h2>Пополнение</h2>
+        <div class="topup-tabs" style="display:flex;gap:10px;margin-bottom:18px;">
+            <button id="tabCard" class="topup-tab topup-tab-active" type="button">Картой</button>
+            <button id="tabGift" class="topup-tab" type="button">Подарком</button>
+            <button id="tabCrypto" class="topup-tab" type="button">TON/USDT</button>
+        </div>
+        
+        <!-- Картой -->
+        <div id="topupCardBlock">
+            <div class="modal-desc">Пополняя баланс за рубли, в боте, вы соглашаетесь с правилами сервиса, минимальный депозит — 100 ₽, максимальный депозит — 50 000 ₽</div>
+            <label class="modal-label">Номер карты</label>
+            <div class="modal-copy-row">
+                <input id="cardNumberInput" class="modal-input" type="text" value="440055444" readonly>
+                <button class="modal-copy-btn" onclick="copyToClipboard('cardNumberInput')">Скопировать</button>
+            </div>
+            <label class="modal-label">Комментарий к пополнению</label>
+            <div class="modal-copy-row">
+                <input id="commentInput" class="modal-input" type="text" value="#fsa456" readonly>
+                <button class="modal-copy-btn" onclick="copyToClipboard('commentInput')">Скопировать</button>
+            </div>
+            <a href="http://t.me/sckyka" class="payment-link">Оплатить</a>
+        </div>
+        
+        <!-- Подарком -->
+        <div id="topupGiftBlock" style="display:none;">
+            <div style="color:#fff;font-size:1.18rem;font-weight:700;margin-bottom:12px;">Как продать подарок?</div>
+            <div style="color:#bdbdf7;font-size:1.08rem;line-height:1.5;">Отправьте нашему боту <span style='color:#267dff;font-weight:600;'>@sckyka</span> свой подарок, он появится в системе автоматически. Останется назначить его цену.</div>
+            <a href="http://t.me/sckyka" class="payment-link">Перейти к боту</a>
+        </div>
+        
+        <!-- TON/USDT -->
+        <div id="topupCryptoBlock" style="display:none;">
+            <div class="modal-desc">Пополнение криптовалютой TON или USDT</div>
+            
+            <label class="modal-label">TON кошелек</label>
+            <div class="modal-copy-row">
+                <input id="tonWalletInput" class="modal-input" type="text" value="EQABC1234567890abcdef" readonly>
+                <button class="modal-copy-btn" onclick="copyToClipboard('tonWalletInput')">Скопировать</button>
+            </div>
+            
+            <label class="modal-label">USDT (TRC20) кошелек</label>
+            <div class="modal-copy-row">
+                <input id="usdtWalletInput" class="modal-input" type="text" value="TABC1234567890abcdef" readonly>
+                <button class="modal-copy-btn" onclick="copyToClipboard('usdtWalletInput')">Скопировать</button>
+            </div>
+            
+            <label class="modal-label">Комментарий к переводу</label>
+            <div class="modal-copy-row">
+                <input id="cryptoCommentInput" class="modal-input" type="text" value="#crypto123" readonly>
+                <button class="modal-copy-btn" onclick="copyToClipboard('cryptoCommentInput')">Скопировать</button>
+            </div>
+            
+    </div>
+</div>
+    <div id="productModal" class="modal" style="align-items:flex-end;justify-content:center;">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('productModal')">×</span>
+            <div style="display:flex;align-items:stretch;gap:18px;min-height:100px;">
+                <div id="modalImgBlock" style="position:relative;flex:1;min-width:0;display:flex;align-items:center;justify-content:center;border-radius:18px;overflow:hidden;background:#19192a;"></div>
+                <div style="flex:2;display:flex;flex-direction:column;gap:0;justify-content:center;">
+                    <div id="modalTitle" style="color:#fff;font-size:1.13rem;font-weight:700;line-height:1.1;margin-bottom:6px;"></div>
+                    <div id="modalModel" style="margin-bottom:2px;"></div>
+                    <div id="modalBg" style="margin-bottom:2px;"></div>
+                    <div id="modalPattern"></div>
+                </div>
+            </div>
+            <button id="modalAddToCart" style="background:linear-gradient(90deg,#267dff 60%,#4e9cff 100%);color:#fff;border:none;border-radius:14px;padding:14px 22px;font-size:1.13rem;font-weight:700;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:18px;">
+                <span style="font-weight:600;">Добавить в корзину</span>
+                <span id="modalPriceBottom" style="color:#fff;background:rgba(255,255,255,0.13);border-radius:10px;padding:6px 18px;font-size:1.13rem;font-weight:700;">555.00 ₽</span>
+            </button>
+        </div>
+    </div>
+    
+    <script src="gifts_data.js"></script>
+    <script src="script.js"></script>
+    
+    <script>
+    // Глобальные переменные
+    let user = null;
+    let isTelegram = false;
+    let isAdmin = false;
+    let adminUserId = null;
+    const ADMIN_IDS = [123456789, 987654321];
+
+    // Функция закрытия модальных окон
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Функция копирования в буфер обмена
+    function copyToClipboard(inputId) {
+        const input = document.getElementById(inputId);
+        input.select();
+        document.execCommand('copy');
+        
+    }
+
+    // Инициализация при загрузке
+    document.addEventListener('DOMContentLoaded', function() {
+        initApp();
+        setupEventListeners();
+    });
+
+    function initApp() {
+        initTelegram();
+        initProfile();
+        initNavigation();
+        initModals();
+        fetchGiftsForMarket();
+    }
+
+    function initTelegram() {
+        if (typeof Telegram !== "undefined" && Telegram.WebApp) {
+            user = Telegram.WebApp.initDataUnsafe?.user;
+            isTelegram = true;
+            if (user && ADMIN_IDS.includes(user.id)) {
+                isAdmin = true;
+                adminUserId = user.id;
+            }
+        }
+    }
+
+    function initProfile() {
+        const profileDiv = document.getElementById('profile');
+        if (!profileDiv) return;
+
+        if (user) {
+            profileDiv.innerHTML = `
+                <div class="profile-info" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <img src="${user.photo_url || 'logo.svg'}" alt="avatar" class="profile-avatar" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
+                        <div>
+                            <div class="profile-name" style="font-weight:700;">${user.first_name}${user.last_name ? ' ' + user.last_name : ''}</div>
+                            <div class="profile-username" style="color:#888;">@${user.username || 'unknown'}</div>
+                        </div>
+                    </div>
+                    <button id="topupBtn" style="background:#267dff;color:#fff;border:none;border-radius:12px;padding:10px 22px;font-size:1.05rem;font-weight:700;cursor:pointer;">Пополнить</button>
+                </div>
+            `;
+        } else {
+            profileDiv.innerHTML = `
+                <div class="profile-info" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <img src="logo.svg" alt="avatar" class="profile-avatar" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
+                        <div>
+                            <div class="profile-name" style="font-weight:700;">Гость</div>
+                        </div>
+                    </div>
+                    <button id="topupBtn" style="background:#267dff;color:#fff;border:none;border-radius:12px;padding:10px 22px;font-size:1.05rem;font-weight:700;cursor:pointer;">Пополнить</button>
+                </div>
+            `;
+        }
+    }
+
+    function setupEventListeners() {
+        // Кнопка пополнения
+        document.getElementById('topupBtn')?.addEventListener('click', function() {
+            document.getElementById('commentInput').value = generateRandomComment();
+            document.getElementById('topupModal').style.display = 'flex';
+        });
+
+        // Переключение вкладок пополнения
+        document.getElementById('tabCard')?.addEventListener('click', function() {
+            this.classList.add('topup-tab-active');
+            document.getElementById('tabGift').classList.remove('topup-tab-active');
+            document.getElementById('topupCardBlock').style.display = 'block';
+            document.getElementById('topupGiftBlock').style.display = 'none';
+        });
+
+        document.getElementById('tabGift')?.addEventListener('click', function() {
+            this.classList.add('topup-tab-active');
+            document.getElementById('tabCard').classList.remove('topup-tab-active');
+            document.getElementById('topupCardBlock').style.display = 'none';
+            document.getElementById('topupGiftBlock').style.display = 'block';
+        });
+
+        // Кнопка перехода в маркет
+        document.getElementById('goToMarketBtn')?.addEventListener('click', function() {
+            switchToPage('market');
+        });
+
+        // Фильтрация и сортировка
+        document.getElementById('filterInput')?.addEventListener('input', renderProducts);
+        document.getElementById('sortSelect')?.addEventListener('change', renderProducts);
+    }
+
+    function initNavigation() {
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const page = this.getAttribute('data-page');
+                switchToPage(page);
+            });
+        });
+    }
+
+    function initModals() {
+        // Закрытие модальных окон по клику вне области
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    function switchToPage(page) {
+        // Навигация
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active');
+        
+        // Страницы
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelector(`.page-${page}`)?.classList.add('active');
+
+        // Специфичные действия для страниц
+        if (page === 'market') renderProducts();
+        if (page === 'cart') renderCart();
+    }
+
+    function generateRandomComment() {
+        return '#' + Math.random().toString(36).substr(2, 8);
+    }
+
+    // Глобальные функции для использования в других скриптах
+    window.closeModal = closeModal;
+    window.copyToClipboard = copyToClipboard;
+    window.switchToPage = switchToPage;
+    </script>
+</body>
+</html>

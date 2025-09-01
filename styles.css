@@ -2408,3 +2408,97 @@ html, body {
     z-index: 1000 !important;
     margin-top: auto !important;
 }
+
+/* --- 1. Плавающий остров для нижней панели --- */
+.bottom-nav {
+    border-radius: 40px !important;       /* сильнее скругляем */
+    margin: 0 auto 20px auto !important;  /* отрываем от краёв */
+    max-width: 500px !important;          /* делаем как остров */
+    background: rgba(35,35,58,0.85) !important;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 40px rgba(38,125,255,0.2) !important;
+}
+
+/* --- 2. Переносим баланс между ником и пополнением --- */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start !important; 
+    gap: 12px;
+}
+
+.user-name {
+    margin-right: 0 !important;
+}
+
+.user-balance {
+    order: 2; /* встанет после ника */
+    margin-left: auto;
+}
+
+.user-topup {
+    order: 3;
+}
+
+/* --- 3. Убираем чёрный квадрат в корзине --- */
+.page-cart {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Баланс в шапке между ником и "Пополнить" */
+.top-bar { position: relative; } /* гарантия контекста позиционирования */  /* изначальный блок шапки */ 
+.top-bar .moved-to-topbar {
+  background: rgba(35,35,58,0.7);
+  color: #267dff;
+  font-size: 1.13rem;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 9px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.2px solid #267dff22;
+  backdrop-filter: blur(8px);
+  margin-right: 8px; /* зазор перед кнопкой "Пополнить" */
+}
+/* немного ужмём на мобиле */
+@media (max-width: 600px) {
+  .top-bar .moved-to-topbar { font-size: 0.98rem; padding: 4px 10px; }
+}
+
+/* Стили для перенесенного баланса в top-bar */
+.top-bar .moved-to-topbar {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 195, 0, 0.1) 100%);
+    color: #ffd700;
+    font-weight: 700;
+    border-radius: 16px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+    margin: 0 10px;
+}
+
+.top-bar .moved-to-topbar .ton-icon {
+    width: 18px;
+    height: 18px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="%23ffd700"/><path d="M32 12L42 26H32V12zm0 14h10L32 52V26z" fill="%2323233a"/></svg>') center/contain no-repeat;
+    filter: drop-shadow(0 2px 3px rgba(255, 215, 0, 0.4));
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 600px) {
+    .top-bar .moved-to-topbar {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        margin: 0 6px;
+    }
+    
+    .top-bar .moved-to-topbar .ton-icon {
+        width: 16px;
+        height: 16px;
+    }
+}

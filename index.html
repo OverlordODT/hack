@@ -19,10 +19,6 @@
         <option value="asc">Сначала дешевые</option>
         <option value="desc">Сначала дорогие</option>
     </select>
-    <div class="ton-balance">
-        <div class="ton-icon"></div>
-        <span id="tonBalance">0</span>
-    </div>
 </div>
                 <div class="products-grid" id="productsGrid"></div>
             </section>
@@ -268,6 +264,10 @@
                             <div class="profile-name" style="font-weight:700;">${user.first_name}${user.last_name ? ' ' + user.last_name : ''}</div>
                             <div class="profile-username" style="color:#888;">@${user.username || 'unknown'}</div>
                         </div>
+						    <div class="ton-balance">
+        <div class="ton-icon"></div>
+        <span id="tonBalance">0</span>
+    </div>
                     </div>
                     <button id="topupBtn" style="background:#267dff;color:#fff;border:none;border-radius:12px;padding:10px 22px;font-size:1.05rem;font-weight:700;cursor:pointer;">Пополнить</button>
                 </div>
@@ -279,7 +279,11 @@
                         <img src="logo.svg" alt="avatar" class="profile-avatar" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
                         <div>
                             <div class="profile-name" style="font-weight:700;">Гость</div>
-                        </div>
+                        
+						    <div class="ton-balance">
+        <div class="ton-icon"></div>
+        <span id="tonBalance">0</span>
+    </div>
                     </div>
                     <button id="topupBtn" style="background:#267dff;color:#fff;border:none;border-radius:12px;padding:10px 22px;font-size:1.05rem;font-weight:700;cursor:pointer;">Пополнить</button>
                 </div>
